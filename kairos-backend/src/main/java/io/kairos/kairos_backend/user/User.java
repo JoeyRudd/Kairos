@@ -4,8 +4,9 @@ package io.kairos.kairos_backend.user;
 import jakarta.persistence.*;
 import java.time.Instant;
 
+@Table(name = "users")
 @Entity
-public class user {
+public class User {
 
     @Id // indicates the primary key
     @GeneratedValue(strategy=GenerationType.AUTO) // generates the id automatically
@@ -19,9 +20,9 @@ public class user {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
-    protected user() {};
+    protected User() {};
 
-    public user(String userName) {
+    public User(String userName) {
         this.userName = userName;
         this.passwordHash = passwordHash;
         this.createdAt = Instant.now();
