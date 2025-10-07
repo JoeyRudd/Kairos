@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@RequestParam long id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable long id) {
         return userService.findUserById(id)
                 .map(user -> ResponseEntity.ok(userService.convertToResponseDTO(user)))
                 .orElse(ResponseEntity.notFound().build());

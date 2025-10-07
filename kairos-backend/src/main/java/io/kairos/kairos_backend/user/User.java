@@ -4,8 +4,8 @@ package io.kairos.kairos_backend.user;
 import jakarta.persistence.*;
 import java.time.Instant;
 
-@Table(name = "users")
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id // indicates the primary key

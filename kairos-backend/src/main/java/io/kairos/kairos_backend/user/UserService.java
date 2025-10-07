@@ -34,11 +34,11 @@ public class UserService {
         return response;
     }
 
-    Optional<User> findUserByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
-    Optional<User> findUserById(long id) {
+    public Optional<User> findUserById(long id) {
         return userRepository.findById(id);
     }
 
