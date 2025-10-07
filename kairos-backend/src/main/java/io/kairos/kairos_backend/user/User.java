@@ -31,6 +31,19 @@ public class User {
         return String.format("User[id=%d, email='%s']", id, email);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
+
     // getters
     public long getId() {return id;}
     public String getEmail() {return email;}
@@ -41,5 +54,6 @@ public class User {
     public void setEmail(String email) {this.email = email;}
     public void setPasswordHash(String passwordHash) {this.passwordHash = passwordHash;}
     public void setCreatedAt(Instant createdAt) {this.createdAt = createdAt;}
+    public void setId(long id) {this.id = id;}
 
 }
