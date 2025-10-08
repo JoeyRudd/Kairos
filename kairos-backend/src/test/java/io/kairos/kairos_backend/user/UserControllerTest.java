@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -79,11 +78,11 @@ public class UserControllerTest {
         // setup fake data
         List<User> users = Arrays.asList(
                 CreateTestUser(1L, "bill@gmail.com"),
-                CreateTestUser(2l, "john@gmail.com"));
+                CreateTestUser(2L, "john@gmail.com"));
 
         List<UserResponseDTO> expectedUsers = Arrays.asList(
                 CreateTestUserResponseDTO(1L, "bill@gmail.com"),
-                CreateTestUserResponseDTO(2l, "john@gmail.com"));
+                CreateTestUserResponseDTO(2L, "john@gmail.com"));
 
         when(userService.findAllUsers()).thenReturn(users);
         when(userService.convertToResponseDTO(any(User.class)))
