@@ -10,6 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,6 +74,47 @@ public class UserControllerTest {
         verify(userService).findUserById(userId);
     }
 
+    @Test
+    void getAllUsers_ShouldReturnListOfUsers(){
+        // setup fake data
+        List<User> users = Arrays.asList(
+                CreateTestUser(1L, "bill@gmail.com"),
+                CreateTestUser(2l, "john@gmail.com"));
 
+        List<UserResponseDTO> expectedUsers = Arrays.asList(
+                CreateTestUserResponseDTO(1L, "bill@gmail.com"),
+                CreateTestUserResponseDTO(2l, "john@gmail.com"));
+
+        when(userService.findAllUsers()).thenReturn(users);
+        when(userService.convertToResponseDTO(any(User.class)))
+                .thenReturn(expectedUsers.get(0))
+                .thenReturn(expectedUsers.get(1));
+
+        // execute the method
+        ResponseEntity<List<UserResponseDTO>> response = userController.getAllUsers();
+
+        // verify that the expectedUsers were returned
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(2, response.getBody().size());
+        assertEquals(expectedUsers, response.getBody());
+        // ensure that the userService was called
+        verify(userService, times(2)).convertToResponseDTO(any());
+    }
+
+    private User CreateTestUser(Long id, String email){
+        User user = new User();
+        user.setId(id);
+        user.setEmail(email);
+        return user;
+    }
+
+    private UserResponseDTO CreateTestUserResponseDTO(Long id, String email){
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setID(id);
+        userResponseDTO.setEmail(email);
+        return userResponseDTO;
+    }
     
 }
+
+
