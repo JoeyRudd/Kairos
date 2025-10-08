@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -43,9 +46,30 @@ public class UserControllerTest {
         // verify that the expectedUser was returned
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUser, response.getBody());
+        // ensure that the userService was called with the correct userRequest
         verify(userService).createUser(userRequest);
     }
 
+    @Test
+    void getUserByID_WhenUserExists_ShouldReturnUser(){
+        // set up the test data
+        long userId = 1L;
+        UserResponseDTO expectedUser = new UserResponseDTO();
+        expectedUser.setID(1L);
+        expectedUser.setEmail("test@testing.com");
+
+        // when the getUserById method is called, return the expectedUser
+        when(userService.findUserById(userId)).thenReturn(Optional.of(new User()));
+        when(userService.convertToResponseDTO(any())).thenReturn(expectedUser);
+
+        // execute the method
+        ResponseEntity<UserResponseDTO> response = userController.getUserById(userId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedUser, response.getBody());
+        // ensure that the userService was called with the correct userId
+        verify(userService).findUserById(userId);
+    }
 
 
     
