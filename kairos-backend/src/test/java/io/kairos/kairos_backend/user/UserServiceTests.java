@@ -2,7 +2,6 @@ package io.kairos.kairos_backend.user;
 
 import io.kairos.kairos_backend.user.dto.UserRequestDTO;
 import io.kairos.kairos_backend.user.dto.UserResponseDTO;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 // enabke mockito for JUnit 5
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +51,33 @@ public class UserServiceTests {
 
     @Test
     void createUser_WhenUserIsValid_ShouldReturnCreatedUser() {
+        // arrange - mock the repository to return the test user
+        when(userRepository.save(any(User.class))).thenReturn(testUser1);
 
+        // act - call the create user method
+        UserResponseDTO createdUser = userService.createUser(testUserRequest1);
+
+        // assert - verify the user was created and returned correctly
+        assertNotNull(createdUser);
+        assertEquals(testUserResponse1.getEmail(), createdUser.getEmail());
+        assertEquals(testUserResponse1.getID(), createdUser.getID());
+        assertNotNull(createdUser.getCreatedAt());
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void convertToResponseDTO_WhenUserIsValid_ShouldReturnCorrectResponseDTO(){
+        // arrange
+        UserResponseDTO expectedResponse = testUserResponse1;
+
+        // act
+        UserResponseDTO actualResponse = userService.convertToResponseDTO(testUser1);
+
+        // assert
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
+        assertEquals(expectedResponse.getID(), actualResponse.getID());
+        assertNotNull(actualResponse.getCreatedAt());
     }
 
     private User createTestUser(Long id, String email, String password){
