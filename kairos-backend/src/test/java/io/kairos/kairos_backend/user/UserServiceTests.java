@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 
@@ -78,6 +80,18 @@ public class UserServiceTests {
         assertEquals(expectedResponse.getEmail(), actualResponse.getEmail());
         assertEquals(expectedResponse.getID(), actualResponse.getID());
         assertNotNull(actualResponse.getCreatedAt());
+    }
+
+    @Test
+    public void testPasswordHashing(){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        String rawPassword = "pass123";
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+
+        // verify
+        assertTrue(passwordEncoder.matches(rawPassword, hashedPassword));
+        assertFalse(passwordEncoder.matches("wrongPassword", hashedPassword));
     }
 
     private User createTestUser(Long id, String email, String password){

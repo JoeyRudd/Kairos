@@ -3,6 +3,7 @@ package io.kairos.kairos_backend.user;
 import io.kairos.kairos_backend.user.dto.UserRequestDTO;
 import io.kairos.kairos_backend.user.dto.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,15 +16,25 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserResponseDTO createUser(UserRequestDTO userRequest) {
         // create a new user entity
         User user = new User();
         user.setEmail(userRequest.getEmail());
         // handle password
-        user.setPasswordHash(userRequest.getPassword());
+        String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
+        user.setPasswordHash(hashedPassword);
+
         user.setCreatedAt(Instant.now());
         User savedUser = userRepository.save(user);
         return convertToResponseDTO(savedUser);
+    }
+
+    // method to veify password during login
+    public boolean verifyPassword(String rawPassowrd, String hashedPassword) {
+        return passwordEncoder.matches(rawPassowrd, hashedPassword);
     }
 
     public UserResponseDTO convertToResponseDTO(User user) {
