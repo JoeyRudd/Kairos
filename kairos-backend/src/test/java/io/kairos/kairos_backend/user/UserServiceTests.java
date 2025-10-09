@@ -24,6 +24,10 @@ public class UserServiceTests {
     @Mock
     private UserRepository userRepository;
 
+    // mock password encoder
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     // inject mocks into the user service
     @InjectMocks
     private UserService userService;
