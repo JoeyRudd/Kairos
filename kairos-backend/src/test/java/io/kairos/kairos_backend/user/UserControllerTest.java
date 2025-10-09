@@ -28,7 +28,7 @@ public class UserControllerTest {
     private UserController userController;
 
     @Test
-    void createUser_WithValidUser_ShouldReturnCreatedUser() {
+    void registerUser_WithValidUser_ShouldReturnRegisteredUser() {
         // set up the test data
         UserRequestDTO userRequest = new UserRequestDTO();
         userRequest.setEmail("test@testing.com");
@@ -39,17 +39,17 @@ public class UserControllerTest {
         expectedUser.setID(1L);
         expectedUser.setEmail("test@testing.com");
 
-        // when the createUser method is called, return the expectedUser
-        when(userService.createUser(userRequest)).thenReturn(expectedUser);
+        // when the registerUser method is called, return the expectedUser
+        when(userService.registerUser(userRequest)).thenReturn(expectedUser);
 
         // execute the method
-        ResponseEntity<UserResponseDTO> response = userController.createUser(userRequest);
+        ResponseEntity<UserResponseDTO> response = userController.registerUser(userRequest);
 
         // verify that the expectedUser was returned
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUser, response.getBody());
         // ensure that the userService was called with the correct userRequest
-        verify(userService).createUser(userRequest);
+        verify(userService).registerUser(userRequest);
     }
 
     @Test

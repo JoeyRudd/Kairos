@@ -40,13 +40,13 @@ public class UserServiceTests {
     void setup(){
         // setup test users
         testUser1 = createTestUser(1L, "user1@gmail.com", "pass123");
-        testUser2 = createTestUser(2L, "user2@gmail.com", "pass123");
-        testUser3 = createTestUser(3L, "user3@gmail.com", "pass123");
+        testUser2 = createTestUser(2L, "user2@gmail.com", "pass456");
+        testUser3 = createTestUser(3L, "user3@gmail.com", "pass789");
 
         // setup test user requests
         testUserRequest1 = createTestUserRequest("user1@gmail.com", "pass123");
-        testUserRequest2 = createTestUserRequest("user2@gmail.com", "pass123");
-        testUserRequest3 = createTestUserRequest("user3@gmail.com", "pass123");
+        testUserRequest2 = createTestUserRequest("user2@gmail.com", "pass456");
+        testUserRequest3 = createTestUserRequest("user3@gmail.com", "pass789");
 
         // setup test user responses
         testUserResponse1 = createTestUserResponse(1L, "user1@gmail.com", testUser1.getCreatedAt());
@@ -61,7 +61,7 @@ public class UserServiceTests {
         when(userRepository.save(any(User.class))).thenReturn(testUser1);
 
         // act - call the create user method
-        UserResponseDTO createdUser = userService.createUser(testUserRequest1);
+        UserResponseDTO createdUser = userService.registerUser(testUserRequest1);
 
         // assert - verify the user was created and returned correctly
         assertNotNull(createdUser);
@@ -120,7 +120,6 @@ public class UserServiceTests {
         userResponse.setCreatedAt(createdAt);
         return userResponse;
     }
-
 
 
 

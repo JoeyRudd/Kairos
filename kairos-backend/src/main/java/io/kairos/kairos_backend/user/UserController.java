@@ -1,6 +1,7 @@
 package io.kairos.kairos_backend.user;
 import io.kairos.kairos_backend.user.dto.UserResponseDTO;
 import io.kairos.kairos_backend.user.dto.UserRequestDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO userRequestDTO) {
-        UserResponseDTO createdUser = userService.createUser(userRequestDTO); // create user
-        return ResponseEntity.ok(createdUser); // return if user was created successfully
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
+        try {
+            UserResponseDTO createdUser = userService.registerUser(userRequestDTO);
+            return ResponseEntity.ok(createdUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/{id}")

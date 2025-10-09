@@ -19,7 +19,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserResponseDTO createUser(UserRequestDTO userRequest) {
+    public UserResponseDTO registerUser(UserRequestDTO userRequest) {
+        if(userRepository.existsByEmail(userRequest.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         // create a new user entity
         User user = new User();
         user.setEmail(userRequest.getEmail());
